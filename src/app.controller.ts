@@ -1,16 +1,14 @@
 import { Controller, Post, Request, UseGuards } from '@nestjs/common';
-import { AppService } from './app.service';
 import { LocalAuthGuard } from './auth/local-auth.guard';
+import { AuthService } from './auth/auth.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Request() req) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...result } = req.user['_doc'];
-    return result;
+    return this.authService.login(req.user);
   }
 }
